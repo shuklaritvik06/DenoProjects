@@ -17,6 +17,7 @@ export const post_ABlog = async (context: RouterContext)=>{
         blogBody: data.blogBody
     });
     context.response.status = 201;
+    context.response.body = { message: "Blog added successfully" };
 }
 
 export const put_ABlog = async (context: RouterContext)=>{
