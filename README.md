@@ -1,5 +1,5 @@
-# LearnDeno
+# Deno Projects
 
-Simple repo to learn some deno concepts. :)
+Project Made using Deno
 
 - [x] Blog API
