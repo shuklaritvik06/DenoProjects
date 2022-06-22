@@ -2,5 +2,5 @@
 
 Simple repo to learn some deno concepts. :)
 
-- [ ] Blog API 
+- [x] Blog API 
 - [ ] Chat App

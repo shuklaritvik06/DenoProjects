@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">  
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <title>Blog API</title>
+  </head>
+  <body>
+    <div class="container p-3">
+      <h2 class="text-center my-3">Welcome to Blog API</h2>
+      <select class="form-select my-3" id="api">
+        <option selected>Select your Method</option>
+        <option value="GET">GET</option>
+        <option value="PUT">PUT</option>
+        <option value="POST">POST</option>
+        <option value="DELETE">DELETE</option>
+      </select>
+      <input type="text" id="title" class="form-control my-3 d-none" placeholder="Title">
+      <textarea name="body" id="body" cols="30" rows="10" class="form-control my-3 d-none" placeholder="Blog"></textarea>
+      <input type="text" id="author" class="form-control my-3 d-none" placeholder="Enter your name">
+      <input type="text" id="blogUpdate" class="form-control my-3 d-none" placeholder="Enter your blog Title to update">
+      <button id="apiButton" class="btn btn-outline-warning my-3">Submit</button>
+      <div class="shadow p-3 mb-5 bg-body rounded"><pre><code  id="apiResponse">Response</code></pre></div>
+    </div>
+    <script>
+      const method = document.getElementById("api");
+      const responseArea = document.getElementById("apiResponse");
+      const blogTitle = document.getElementById("title");
+      const blogBody = document.getElementById("body");
+      const blogAuthor = document.getElementById("author");
+      const blogUpdate = document.getElementById("blogUpdate");
+    method.addEventListener("change", function() {  
+      switch (method.value) {
+        case "GET":
+          addClass(blogTitle, "d-none");
+          addClass(blogBody, "d-none");
+          addClass(blogAuthor, "d-none");
+          addClass(blogUpdate, "d-none");
+          break;
+        case "PUT":
+          removeClass(blogTitle, "d-none");
+          removeClass(blogBody, "d-none");
+          removeClass(blogAuthor, "d-none");
+          removeClass(blogUpdate, "d-none");
+          break;
+        case "POST":
+          removeClass(blogTitle, "d-none");
+          removeClass(blogBody, "d-none");
+          removeClass(blogAuthor, "d-none");
+          addClass(blogUpdate, "d-none");
+          break;
+        case "DELETE":
+          removeClass(blogUpdate, "d-none");
+          addClass(blogTitle, "d-none");
+          addClass(blogBody, "d-none");
+          addClass(blogAuthor, "d-none");
+          break;
+      }
+    });
+      document.getElementById("apiButton").addEventListener("click", function() {
+         if(method.value==="GET"){
+            fetch("/api",{
+                method: method.value
+            }).then((response
+            )=>{
+                response.json().then((data)=>{
+                    responseArea.innerHTML= JSON.stringify(data,null, 4);
+              })
+            })
+          }
+         else{
+            request(method.value);
+         } 
+      });
+      function request(method){
+        let body;
+        let BlogTitle;
+        let BlogBody;
+        let BlogAuthor;
+        if(method==="POST"){
+          BlogTitle = blogTitle.value;
+          BlogBody = blogBody.value;
+          BlogAuthor = blogAuthor.value;
+          body = {
+            title: BlogTitle,
+            authorName: BlogAuthor,
+            blogBody: BlogBody
+          }
+        }else if(method==="PUT"){
+          BlogTitle = blogTitle.value;
+          BlogBody = blogBody.value;
+          BlogAuthor = blogAuthor.value;
+          UpdateTitle = blogUpdate.value;
+          body = {
+            title: BlogTitle,
+            authorName: BlogAuthor,
+            blogBody: BlogBody,
+            updateTitle: UpdateTitle
+          }
+        }else if(method==="DELETE"){
+          BlogTitle = blogTitle.value;
+          body = {
+            title: BlogTitle
+          }
+        }
+
+        fetch("/api",{
+          method: method,
+          headers: {
+          'Content-type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        }).then((response
+        )=>{
+            response.json().then((data)=>{
+                responseArea.innerHTML= JSON.stringify(data,null, 4);
+          })
+        })
+      }
+      function addClass(element, className) {
+        element.classList.add(className);
+      }
+      function removeClass(element, className) {
+        element.classList.remove(className);
+      }
+    </script>
+  </body>
+</html>
