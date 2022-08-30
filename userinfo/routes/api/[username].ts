@@ -1,4 +1,4 @@
-import { HandlerContext } from "$fresh/server.ts";
+import { HandlerContext } from "https://deno.land/x/fresh@1.0.2/server.ts";
 
 export const handler = {
   async POST(_req: Request, _ctx: HandlerContext){
